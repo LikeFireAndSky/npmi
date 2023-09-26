@@ -1,3 +1,3 @@
 export default function Home() {
-	return <div>안녕</div>;
+	return <div>자동배포 확인</div>;
 }
