@@ -1,3 +1,7 @@
-export default function Home() {
-	return <div>자동배포 확인</div>;
-}
+import React from 'react';
+
+const page = () => {
+	return <div>POPO</div>;
+};
+
+export default page;
