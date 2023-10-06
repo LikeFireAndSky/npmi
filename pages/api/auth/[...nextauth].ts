@@ -32,23 +32,23 @@ export const authOption: AuthOptions = {
 	],
 
 	callbacks: {
-		async session({ session, token, user }) {
+		async session({ session }) {
 			return session;
 		},
 
-		async signIn({ user, account, profile, email, credentials }) {
-			console.log('console', account);
+		async signIn({ account }) {
 			const accessToken = account?.id_token;
 			const credential = GoogleAuthProvider.credential(accessToken as string);
-			const result = await signInWithCredential(auth, credential).then(
-				(res) => {
-					console.log('res', res);
-					return true;
-				},
-			);
-			console.log('result', result);
-
-			return true;
+			try {
+				const result = await signInWithCredential(auth, credential).then(
+					(res) => {
+						return true;
+					},
+				);
+				return true;
+			} catch (error) {
+				return false;
+			}
 		},
 	},
 
