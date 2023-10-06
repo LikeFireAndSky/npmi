@@ -3,7 +3,6 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint", "prettier"],
   "parserOptions": {
-    "project": "./tsconfig.json",
     "createDefaultProgram": true
   },
   "env": { // 전역객체를 eslint가 인식하는 구간
@@ -35,6 +34,7 @@
     "no-console": "off", // console 사용 가능
     "no-alert": "off", // alert 사용 가능
     "no-var": "off", // var 사용 가능
+    "no-param-reassign": "off", // param assign 가능
     "vars-on-top": "off" // var를 맨 위로 올리지 않아도 됨
   }
 }

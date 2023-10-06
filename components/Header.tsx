@@ -67,9 +67,9 @@ const NavList = () => {
 				>
 					Login
 				</Link>
-				<SignInButton />
-				<SignOutButton />
 			</Typography>
+			<SignInButton />
+			<SignOutButton />
 		</ul>
 	);
 };

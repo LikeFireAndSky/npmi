@@ -3,8 +3,11 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { getServerSession } from 'next-auth';
 import Providers from '../../components/Provider';
-import { authOptions } from '../../pages/api/auth/[...nextauth]';
+import { authOption } from '../../pages/api/auth/[...nextauth]';
 import SessionProvider from '../../components/SessionProvider';
+import SignInButton from '../../components/SignInButton';
+
+import Header from '../../components/Header';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,13 +21,23 @@ export default async function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	const session = await getServerSession(authOptions);
+	const session = await getServerSession(authOption);
 
 	return (
 		<html lang="en">
 			<body className={inter.className}>
 				<SessionProvider session={session}>
-					<Providers>{children}</Providers>
+					<Providers>
+						<Header />
+						{!session ? (
+							<div>
+								로그인이 필요합니다.
+								<SignInButton />
+							</div>
+						) : (
+							<div>{children}</div>
+						)}
+					</Providers>
 				</SessionProvider>
 			</body>
 		</html>

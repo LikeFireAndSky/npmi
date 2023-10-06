@@ -9,7 +9,7 @@ const handleSignOut = () => {
 };
 
 const SignOutButton = () => {
-	return <Button onClick={handleSignOut}>SignOutButton</Button>;
+	return <Button onClick={handleSignOut}>로그아웃</Button>;
 };
 
 export default SignOutButton;
