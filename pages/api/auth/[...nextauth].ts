@@ -5,13 +5,13 @@ import { AuthOptions } from 'next-auth';
 import { collection, doc } from 'firebase/firestore';
 import { initializeApp, getApp, getApps } from 'firebase/app';
 import { FirebaseAdapterConfig } from '@auth/firebase-adapter';
-import { db, auth } from '../../../libs/firebase.config';
 import {
 	GoogleAuthProvider,
 	signInWithCredential,
 	GithubAuthProvider,
 	signInWithPopup,
 } from 'firebase/auth';
+import { db, auth } from '../../../libs/firebase.config';
 
 // Dynamic 라우팅을 사용한는 이유는 signIn, callback, signOut을 자동으로 처리하기 위해서이다.
 

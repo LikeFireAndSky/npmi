@@ -3,6 +3,8 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint", "prettier"],
   "parserOptions": {
+    "ecmaVersion": 2021, // 최신 문법 지원
+    "project": "./tsconfig.json", // tsconfig.json의 내용을 eslint에서도 사용
     "createDefaultProgram": true
   },
   "env": { // 전역객체를 eslint가 인식하는 구간
