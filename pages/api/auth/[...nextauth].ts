@@ -2,21 +2,15 @@ import NextAuth from 'next-auth/next';
 import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 import { AuthOptions } from 'next-auth';
-import { collection, doc } from 'firebase/firestore';
-import { initializeApp, getApp, getApps } from 'firebase/app';
-import { FirebaseAdapterConfig } from '@auth/firebase-adapter';
 import {
 	GoogleAuthProvider,
 	signInWithCredential,
 	GithubAuthProvider,
-	signInWithPopup,
 } from 'firebase/auth';
-import { db, auth } from '../../../libs/firebase.config';
+import { auth } from '../../../libs/firebase.config';
+import getGithubToken from '../../../utils/getGithubToken';
 
 // Dynamic 라우팅을 사용한는 이유는 signIn, callback, signOut을 자동으로 처리하기 위해서이다.
-
-const googleProvider = new GoogleAuthProvider();
-const githubProvider = new GithubAuthProvider();
 
 export const authOption: AuthOptions = {
 	providers: [
@@ -28,27 +22,56 @@ export const authOption: AuthOptions = {
 		GoogleProvider({
 			clientId: process.env.GOOGLE_CLIENT_ID!,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRETS!,
+			idToken: true,
 		}),
 	],
 
 	callbacks: {
-		async session({ session }) {
+		async session({ session, token, user }: any) {
+			session.user.username = session?.user?.name
+				.split(' ')
+				.join('')
+				.toLocaleLowerCase();
+
+			session.user.uid = token.sub;
 			return session;
 		},
 
-		async signIn({ account }) {
-			const accessToken = account?.id_token;
-			const credential = GoogleAuthProvider.credential(accessToken as string);
-			try {
-				const result = await signInWithCredential(auth, credential).then(
-					(res) => {
-						return true;
-					},
+		async signIn({ account, user, credentials }) {
+			if (account?.provider === 'google') {
+				console.log(account.id_token);
+				const credential = GoogleAuthProvider.credential(
+					account?.id_token as string,
 				);
-				return true;
-			} catch (error) {
-				return false;
+				try {
+					const result = await signInWithCredential(auth, credential).then(
+						(res) => {
+							return true;
+						},
+					);
+					return true;
+				} catch (error) {
+					console.log('error occured');
+					console.log(error);
+					return false;
+				}
 			}
+			if (account?.provider === 'github') {
+				const token = await getGithubToken(account?.access_token as string);
+				const credential = GithubAuthProvider.credential(token);
+				const credential2 = GithubAuthProvider.credential(
+					account?.access_token as string,
+				);
+
+				try {
+					signInWithCredential(auth, credential2).then((res) => {
+						console.log('login success');
+					});
+				} catch (error) {
+					console.log(error);
+				}
+			}
+			return false;
 		},
 	},
 

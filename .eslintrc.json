@@ -36,6 +36,7 @@
     "no-console": "off", // console 사용 가능
     "no-alert": "off", // alert 사용 가능
     "no-var": "off", // var 사용 가능
+    "no-multi-assign": "off", // 여러개 할당 가능
     "no-param-reassign": "off", // param assign 가능
     "vars-on-top": "off" // var를 맨 위로 올리지 않아도 됨
   }
