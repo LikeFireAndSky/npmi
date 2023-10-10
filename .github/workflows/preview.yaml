@@ -20,17 +20,17 @@ env:
 
 on:
   push:
-    branches:
+    branches-ignore:
       - main
 jobs:
-  Deploy-Production:
+  Deploy-Preview:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Install Vercel CLI
         run: npm install --global vercel@canary
       - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=poduction --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
       - name: Set Firebae API Key as Environment Variable
         run: echo "FIREBASE_APIKEY=${{ secrets.FIREBASE_APIKEY }}" >> .env
       - name: Set Firebae Auth Domain as Environment Variable
@@ -62,6 +62,6 @@ jobs:
       - name: Set MongoDB URI as Environment Variable
         run: echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> .env
       - name: Build Project Artifacts
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
